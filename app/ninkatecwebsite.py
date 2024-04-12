@@ -27,8 +27,8 @@ service_account_key = {
 # Initialize Firebase Admin SDK for both Realtime Database and Firestore
 cred = credentials.Certificate(service_account_key)
 
-# if 'app' not in st.session_state:
-st.session_state.app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://self-injecting-solution-default-rtdb.asia-southeast1.firebasedatabase.app'})
+if not firebase_admin._apps:
+    st.session_state.app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://self-injecting-solution-default-rtdb.asia-southeast1.firebasedatabase.app'})
     
 firestore_db = firestore.client()
 
