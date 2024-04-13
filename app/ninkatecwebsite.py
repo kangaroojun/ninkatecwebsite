@@ -184,6 +184,7 @@ if page == 'Patient Data':
     condition = df['Patient Name'] != "ALL"
     filtered_df = df[condition]
     if sorted_column and selected_patient == "ALL":
+        df = filtered_df.dropna(subset=['Patient Name'])  # Drop rows where 'Patient Name' is null
         df = filtered_df.sort_values(sorted_column)
         view = st.dataframe(df, column_order=('Serial Number', 'Patient Name', 'Start Date', 'Morphine Doses Available', 'Fentanyl Doses Available', 'Haloperidol Doses Available', 'Hyoscine Doses Available', 'Midazolam Doses Available'))
     else:
