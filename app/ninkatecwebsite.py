@@ -246,7 +246,7 @@ if page == 'Add New Syringe':
             st.success("Syringe data added successfully")
 
     with existing_patient:    
-        collection_ref = firestore_db.collection("syringes").where('patient_name', '!=', None).get()
+        collection_ref = firestore_db.collection("syringes").where('patient_name', '>', '').get()
         for doc in collection_ref.stream():
             patients_sn_list.append([doc.get('patient_name'), doc.get('syringe_sn')])
         for patient in patients_sn_list:
