@@ -355,6 +355,11 @@ if page == 'Add New Syringe':
                     df_timestamps = pd.DataFrame(index=timestamps_dict.keys(), columns=[f'Timestamp {i}' for i in range(1, max_timestamps + 1)])
                     df_intervals = pd.DataFrame(index=timestamps_dict.keys(), columns=[f'Interval {i}' for i in range(1, max_timestamps)])
 
+                    timestamps_dict = {
+                        drug: dict(sorted(values.items(), key=lambda item: item[1]))
+                        for drug, values in timestamps_dict.items()
+                    }
+
                     # Fill DataFrame with timestamps
                     for drug, timestamps in timestamps_dict.items():
                         for i, timestamp in enumerate(timestamps.values(), start=1):
