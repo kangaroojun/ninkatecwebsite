@@ -489,7 +489,7 @@ if page == 'History':
         patient_data_list.append(patient)
     for i in patient_data_list:     ## Obtain the patient names from the patient data list
         patient_namelist.append(i.get("patient_name"))
-    selected_patient = st.selectbox('Select Patient Name', patient_namelist) ## Create a selectbox with the patient names
+    selected_patient = st.selectbox('Select Patient Name', patient_namelist, index=patient_namelist.index('ALL')) ## Create a selectbox with the patient names
     df = load_data(pd.DataFrame(patient_data_list)) ## Load the patient data list into a dataframe
     df.rename(columns={'hyoscine_issued': 'Hyoscine Dosages Issued', ## Rename the columns
                        'morphine_issued': 'Morphine Dosages Issued', 
