@@ -246,10 +246,9 @@ if page == 'Add New Syringe':
             st.success("Syringe data added successfully")
 
     with existing_patient:    
-        collection_ref = firestore_db.collection("syringes")
+        collection_ref = firestore_db.collection("syringes").where('patient_name', '!=', None).get()
         for doc in collection_ref.stream():
-            if doc.get('patient_name') is not None:
-              patients_sn_list.append([doc.get('patient_name'), doc.get('syringe_sn')])
+            patients_sn_list.append([doc.get('patient_name'), doc.get('syringe_sn')])
         for patient in patients_sn_list:
             patients_list.append(patient[0])
         selected_patient = st.selectbox('Patient', patients_list)
