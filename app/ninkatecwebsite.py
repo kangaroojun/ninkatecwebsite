@@ -27,6 +27,7 @@ service_account_key = {
 # Initialize Firebase Admin SDK for both Realtime Database and Firestore
 cred = credentials.Certificate(service_account_key)
 
+# if 'app' not in st.session_state:
 if not firebase_admin._apps:
     st.session_state.app = firebase_admin.initialize_app(cred, {'databaseURL': 'https://self-injecting-solution-default-rtdb.asia-southeast1.firebasedatabase.app'})
     
@@ -167,10 +168,11 @@ if page == 'Patient Data':
         syringe = doc.to_dict()
         patient_data_list.append(syringe)
     for i in patient_data_list:     ## Obtain the patient names from the patient data list
-        patient_namelist.append(i.get("patient_name"))
-    selected_patient = st.selectbox('Select Patient Name', patient_namelist) ## Create a selectbox with the patient names
+        if i.get("patient_name") is not None:
+            patient_namelist.append(i.get("patient_name"))
+    selected_patient = st.selectbox('Select Patient Name', patient_namelist, index=patient_namelist.index('ALL')) ## Create a selectbox with the patient names
     df = load_data(pd.DataFrame(patient_data_list)) ## Load the patient data list into a dataframe
-    df.drop(columns=['hyoscine_issued', 'morphine_issued', 'midazolam_issued', 'haloperidol_issued', 'fentanyl_issued'], inplace=True) ## Drop the columns that are not needed
+    df.drop(columns=['hyoscine_issued', 'morphine_issued', 'midazolam_issued', 'haloperidol_issued', 'fentanyl_issued', 'hyoscine_injected', 'morphine_injected', 'haloperidol_injected', 'fentanyl_injected', 'midazolam_injected'], inplace=True) ## Drop the columns that are not needed
     df.rename(columns={'hyoscine_dosage_remaining': 'Hyoscine Doses Available', ## Rename the columns
                        'morphine_dosage_remaining': 'Morphine Doses Available', 
                        'syringe_sn': 'Serial Number', 
@@ -180,7 +182,7 @@ if page == 'Patient Data':
                        'patient_name': 'Patient Name',
                        'start_date': 'Start Date'}, 
                        inplace=True) 
-    sorted_column = st.selectbox('Sort by:', options=df.columns, key='sort') ## Create a selectbox to sort the dataframe
+    sorted_column = st.selectbox('Sort by:', options=df.columns, index=df.columns.get_loc("Serial Number"), key='sort') ## Create a selectbox to sort the dataframe
     condition = df['Patient Name'] != "ALL"
     filtered_df = df[condition]
     if sorted_column and selected_patient == "ALL":
@@ -246,9 +248,10 @@ if page == 'Add New Syringe':
             st.success("Syringe data added successfully")
 
     with existing_patient:    
-        collection_ref = firestore_db.collection("syringes").where('patient_name', '>', '').get()
-        for doc in collection_ref:
-            patients_sn_list.append([doc.get('patient_name'), doc.get('syringe_sn')])
+        collection_ref = firestore_db.collection("syringes")
+        for doc in collection_ref.stream():
+            if doc.get('patient_name') != None:
+                patients_sn_list.append([doc.get('patient_name'), doc.get('syringe_sn')])
         for patient in patients_sn_list:
             patients_list.append(patient[0])
         selected_patient = st.selectbox('Patient', patients_list)
