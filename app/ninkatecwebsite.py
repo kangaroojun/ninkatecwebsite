@@ -248,7 +248,7 @@ if page == 'Add New Syringe':
     with existing_patient:    
         collection_ref = firestore_db.collection("syringes")
         for doc in collection_ref.stream():
-            if doc.get('patient_name') != None:
+            if doc.get('patient_name') is not None:
               patients_sn_list.append([doc.get('patient_name'), doc.get('syringe_sn')])
         for patient in patients_sn_list:
             patients_list.append(patient[0])
