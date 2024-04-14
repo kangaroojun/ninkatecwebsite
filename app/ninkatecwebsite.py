@@ -412,7 +412,7 @@ if page == 'Add New Syringe':
                     ax2.set_ylim(0, 5)
                     ax2.set_xlabel('Interval Number', fontsize=10)  # Adjust the font size here
                     ax2.set_ylabel('Time Interval', fontsize=10)   # Adjust the font size here
-                    ax2.set_title('Intervals between Last 20 Injections', fontsize=12)  # Adjust the font size here
+                    ax2.set_title('Intervals between Last 5 Injections', fontsize=12)  # Adjust the font size here
                     ax2.tick_params(axis='both', which='major', labelsize=8)  # Adjust the tick label size here
                     ax2.legend(fontsize=8)  # Adjust the legend font size here
                     fig2.patch.set_alpha(0)  # Set alpha value for the figure background
