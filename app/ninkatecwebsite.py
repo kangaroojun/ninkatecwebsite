@@ -459,10 +459,7 @@ if page == 'Add New Syringe':
                         "haloperidol_issued": doc.get("haloperidol_issued") + drugs_restock_dict['Haloperidol'],
                         "hyoscine_issued": doc.get("hyoscine_issued") + drugs_restock_dict['Hyoscine'],
                         "midazolam_issued": doc.get("midazolam_issued") + drugs_restock_dict['Midazolam']
-                    })
-
-                    temp = doc_ref.get()
-                    st.write(temp.get("morphine_issued"))    
+                    }) 
 
                     history_ref = firestore_db.collection("history").document(f"{selected_patient}-{doc.get('start_date')}")
 
